@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>注册</title>
+</head>
+<link rel="stylesheet" href="/css/register.css">
+<script src="/js/fontsize.js"></script>
+<script src="/js/vue.min.js"></script>
+<script>
+    // ----------完全加载前的loading页面----------
+    //监听加载状态改变
+    document.onreadystatechange = completeLoading;
+
+    //加载状态为complete时移除loading效果
+    function completeLoading() {
+        if (document.readyState == "complete") {
+            var loadingMask = document.getElementById('loadingDiv');
+            loadingMask.parentNode.removeChild(loadingMask);
+        }
+    }
+</script>
+
+<body>
+    <div id=loadingDiv
+        style="position: fixed;width:100vw;height: 100vh; background:#E9EDF0;z-index:999;display: flex;flex-direction: column;justify-content: center;align-items: center;">
+        <img src="./img/loading.gif" style="width:50px;height:50px;">
+        <span>加载中...</span>
+    </div>
+    <div id="app">
+
+        <div>
+            <img src='/img/register3/背景@2x.png' class='topbg' mode="widthFix" />
+        </div>
+        <div class="bottom">
+            <div class="contain">
+                <div class="logobox">
+                    <img src='/img/register3/logo@2x.png' class="logo" />
+                </div>
+                <div class="label">手机号码注册</div>
+                <div class="iptbox inpsize ipt">
+                    <input type="tel" class="inpsize" placeholder="请输入手机号" v-model='phone' maxlength="11">
+                </div>
+                <div class="iptbox inpsize ipt">
+                    <input :type="passwordType" class="inpsize" placeholder="请输入密码" v-model='password' maxlength="32">
+                    <div class="eyebox">
+                        <img :src="passwordType=='password'?'/img/closeeye.png':'/img/ai-eye.png'" alt=""
+                            style="width:16px;height:16px;" @click='eyebtn'>
+                    </div>
+                </div>
+                <div class="iptcode inpsize ipt">
+                    <input type="number" class="codeinput" placeholder="请输入验证码" v-model='code'>
+                    <div class="getcode">
+                        <div v-if='canGetCode' class="getcode-text" v-on:click="getcode">获取验证码</div>
+                        <div v-else class="getcode-text getcode-num">{{codetime}} 秒</div>
+                    </div>
+                </div>
+
+                <div class="register" v-on:click="register">立即注册</div>
+                <div class="tips">注册即表示同意
+                    <span class="tips-detail">《注册用户协议》</span>
+                </div>
+
+                <div class="sharebox">
+                    <img class="icon" src="/img/register3/QQ @2x.png" />
+                    <img class="icon" src="/img/register3/新浪@2x.png" />
+                    <img class="icon" src="/img/register3/微信@2x.png" />
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    const intervaltime = 6;
+    new Vue({
+        el: '#app',
+        data: {
+            phone: '',
+            password: '',
+            code: '',
+
+            passwordType: 'password',
+
+            canGetCode: true,
+            codetime: intervaltime
+
+        },
+        methods: {
+            register() {
+                if (!/^\d{11}$/.test(this.phone)) {
+                    alert('请正确输入手机号');
+                    return;
+                };
+                if (!/\w{6,32}/.test(this.password)) {
+                    alert('请输入6-32位字母、数字以及下划线的密码');
+                    return;
+                };
+                if (!this.code) {
+                    alert('请输入验证码');
+                    return;
+                };
+                console.log(this.phone, this.password, this.code)
+            },
+            getcode() {
+                this.canGetCode = false;
+                let time = this.codetime;
+                let timer = setInterval(() => {
+                    time--;
+                    this.codetime = time;
+                    if (time == 0) {
+                        clearInterval(timer);
+                        this.canGetCode = true;
+                        this.codetime = intervaltime;
+                        return;
+                    }
+                }, 1000)
+            },
+            eyebtn() {
+                this.passwordType = this.passwordType == 'password' ? 'text' : 'password';
+            }
+        }
+    })
+</script>
+
+</html>

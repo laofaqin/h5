@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<link rel="stylesheet" href="/css/record.css">
+<script src="/js/fontsize.js"></script>
+<script src="/js/vue.min.js"></script>
+
+<body>
+    <div id="page">
+        <div class="title">
+            <div class="backiconbox">
+                <img src="/img/arrow-left.png" class="backicon" alt="" />
+            </div>
+            <span>资产总览</span>
+        </div>
+        <div class="tabbar" @click="clicktab">
+            <div class="tabbaritem">
+                <span id="one" :class="['tabbarcontent', selectTab==0?'active':'']">每日收入</span>
+            </div>
+            <div class="tabbaritem">
+                <span id="two" :class="['tabbarcontent', selectTab==1?'active':'']">每日收入</span>
+            </div>
+            <div class="tabbaritem">
+                <span id="three" :class="['tabbarcontent', selectTab==2?'active':'']">每日收入</span>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    new Vue({
+        el: "#page",
+        data: {
+            selectTab: 0
+        },
+        methods: {
+            clicktab(e) {
+                let target;
+                switch (e.target.id) {
+                    case 'one':
+                        this.selectTab = 0;
+                        break;
+                    case 'two':
+                        this.selectTab = 1;
+                        break;
+                    case 'three':
+                        this.selectTab = 2;
+                        break;
+                }
+            }
+        }
+    })
+</script>
+
+</html>
