@@ -6,28 +6,84 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+<link rel="stylesheet" href="/css/common.css">
 <link rel="stylesheet" href="/css/record.css">
 <script src="/js/fontsize.js"></script>
 <script src="/js/vue.min.js"></script>
 
 <body>
     <div id="page">
-        <div class="title">
-            <div class="backiconbox">
-                <img src="/img/arrow-left.png" class="backicon" alt="" />
+        <div class="pageHead">
+            <div class="title">
+                <div class="backiconbox">
+                    <img src="/img/arrow-left.png" class="backicon" alt="" />
+                </div>
+                <span>资产总览</span>
             </div>
-            <span>资产总览</span>
+            <div class="tabbar" @click="clicktab">
+                <div class="tabbaritem">
+                    <span id="one" :class="['tabbarcontent', selectTab==0?'active':'']">每日收入</span>
+                </div>
+                <div class="tabbaritem">
+                    <span id="two" :class="['tabbarcontent', selectTab==1?'active':'']">提现记录</span>
+                </div>
+                <div class="tabbaritem">
+                    <span id="three" :class="['tabbarcontent', selectTab==2?'active':'']">转账记录</span>
+                </div>
+            </div>
         </div>
-        <div class="tabbar" @click="clicktab">
-            <div class="tabbaritem">
-                <span id="one" :class="['tabbarcontent', selectTab==0?'active':'']">每日收入</span>
+        <div class="content">
+            <div class="incomeDaily" v-if="selectTab==0">
+                <div class="item">
+                    <div class="headtime">2018年11月9日</div>
+                    <div class="item-head">
+                        <div class="item-head-left">
+                            <img src="/img/moneyicon.png" alt="" class="headicon" />
+                            <span class="item-label">总收入</span>
+                        </div>
+                        <div class="item-allInput">+6980.56</div>
+                    </div>
+                    <div class="list-content">
+                        <div class="item-list">
+                            <span class="item-list-label">商城收益</span>
+                            <span class="item-list-label">+80积分</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="tabbaritem">
-                <span id="two" :class="['tabbarcontent', selectTab==1?'active':'']">每日收入</span>
+            <div class="tixianBox" v-if="selectTab==1">
+                <div class="tixianItem">
+                    <div class="headtime">2018年11月9日</div>
+                    <div class="tixianList">
+                        <span class="tixian-label">提现渠道</span>
+                        <div class="tixian-value otherInfo">
+                            <div class="info">
+                                <div class="payway">支付宝</div>
+                                <div class="countInfo">账号：153*****035</div>
+                            </div>
+                            <img src="/img/alipay.png" class="paywayIcon" alt="">
+                        </div>
+                    </div>
+                    <div class="tixianList">
+                        <span class="tixian-label">提现渠道</span>
+                        <span class="tixian-value">-￥600.00</span>
+                    </div>
+                    <div class="tixianList">
+                        <span class="tixian-label">提现渠道</span>
+                        <span class="tixian-value">-￥600.00</span>
+                    </div>
+                </div>
             </div>
-            <div class="tabbaritem">
-                <span id="three" :class="['tabbarcontent', selectTab==2?'active':'']">每日收入</span>
+            <div class="translateRecord" v-if="selectTab==2">
+                <div class="translateList" v-for="i in 20">
+                    <div class="headtime">2018年11月9日</div>
+                    <div class="tixianList">
+                        <span class="tixian-label">提现渠道</span>
+                        <span class="tixian-value">-￥600.00</span>
+                    </div>
+                </div>
             </div>
+
         </div>
     </div>
 </body>

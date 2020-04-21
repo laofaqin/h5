@@ -4,11 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv=" Content-Security-Policy" content=" upgrade-insecure-requests">
     <title>注册</title>
 </head>
 <link rel="stylesheet" href="/css/register.css">
 <script src="/js/fontsize.js"></script>
 <script src="/js/vue.min.js"></script>
+<!-- <script src="/js/axios.js"></script> -->
+<script src="/js/request.js"></script>
+
 <script>
     // ----------完全加载前的loading页面----------
     //监听加载状态改变
@@ -64,7 +68,7 @@
                 </div>
 
                 <div class="sharebox">
-                    <img class="icon" src="/img/register3/QQ @2x.png" />
+                    <img class="icon" src="/img/register3/QQ @2x.png" @click="login()" />
                     <img class="icon" src="/img/register3/新浪@2x.png" />
                     <img class="icon" src="/img/register3/微信@2x.png" />
                 </div>
@@ -102,6 +106,8 @@
                     return;
                 };
                 console.log(this.phone, this.password, this.code)
+
+
             },
             getcode() {
                 this.canGetCode = false;
@@ -119,7 +125,35 @@
             },
             eyebtn() {
                 this.passwordType = this.passwordType == 'password' ? 'text' : 'password';
+            },
+            login() {
+                // axios({
+                //     method: 'post',
+                //     url: 'http://api.xy226688.com:1802/api/users/user/login',
+                //     data: {
+                //         "password": "123456",
+                //         "userName": "18081877581"
+                //     }
+                // }).then((res) => {
+                //     console.log(res)
+                // }).catch(err => {
+                //     console.log(err)
+                // })
+                let params = {
+                    // password	用户密码, 暂时明文传输	string	必填
+                    // userName	用户名	string	必填
+                    password: '123456',
+                    userName: 18081877581
+                }
+
+                loginRequest(params, res => {
+                    console.log(res)
+                })
+                // Request('post', api.login, params).then(res => {
+                //     console.log(res)
+                // })
             }
+
         }
     })
 </script>

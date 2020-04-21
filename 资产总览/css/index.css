@@ -122,3 +122,16 @@ body {
     width:.16rem;
     height: .28rem;
 }
+body,#page{
+    width:100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+.main{
+    flex-shrink: 0;
+}
+.list{
+    flex:1;
+    overflow: auto;
+}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<link rel="stylesheet" href="/css/common.css">
+<link rel="stylesheet" href="/css/detail.css">
+<script src="/js/fontsize.js"></script>
+<script src="/js/vue.min.js"></script>
+
+<body>
+    <div id="page">
+        <div class="title">
+            <div class="backiconbox">
+                <img src="/img/arrow-left.png" class="backicon" alt="" />
+            </div>
+            <span>收益详情</span>
+        </div>
+        <div class="content">
+            <div class="item" v-for="list in 10">
+                <div class="itemdetail flexbet">
+                    <span class="detail-left">收入</span>
+                    <span class="detail-right income">商城</span>
+                </div>
+                <div class="itemdetail flexbet">
+                    <span class="detail-left">收益来源</span>
+                    <span class="detail-right">商城</span>
+                </div>
+                <div class="itemdetail flexbet">
+                    <span class="detail-left">时间</span>
+                    <span class="detail-right">时间</span>
+                </div>
+               
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    new Vue({
+        el: "#page",
+        data: {
+        },
+        methods: {
+           
+        }
+    })
+</script>
+
+</html>
