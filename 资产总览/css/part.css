@@ -14,8 +14,6 @@
     border-bottom: 1px solid #E9EDF0;
 }
 
-
-
 .shouyiLeft, .shouyiRight, .shouyifrom {
     font-size: .24rem;
     font-family: Microsoft YaHei;
@@ -48,5 +46,21 @@
     color: rgba(0, 0, 0, 1);
     line-height: .24rem;
     height: .8rem;
-    padding:0 .3rem;
+    padding: 0 .3rem;
+}
+
+body, #page {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.title {
+    flex-shrink: 0;
+}
+
+.content {
+    flex: 1;
+    overflow: auto;
 }

@@ -10,29 +10,30 @@
 <link rel="stylesheet" href="/css/part.css">
 <script src="/js/fontsize.js"></script>
 <script src="/js/vue.min.js"></script>
+<script src="/js/request.js"></script>
 
 <body>
-    <div class="page">
+    <div id="page">
         <div class="title">
             <div class="backiconbox">
-                <img src="/img/arrow-left.png" class="backicon" alt="" />
+                <img src="/img/arrow-left.png" class="backicon" onclick="goback()" />
             </div>
-            <span>商城收益</span>
+            <span>{{title}}</span>
         </div>
-        <div class="content">
-            <div class="item">
-                <div class="headtime">2018年11月9日</div>
+        <div class="content" ref="activity_scroll" @scroll="activityScroll">
+            <div class="item" v-for="item in list">
+                <div class="headtime">{{item.time}}</div>
                 <div class="about">
                     <div class="shouyi flexbet">
                         <div class="shouyiLeft">
                             <img src="/img/moneyicon.png" alt="" class="headicon" />
                             <span>今日收益</span>
                         </div>
-                        <div class="shouyiRight">+6980.56</div>
+                        <div class="shouyiRight">{{item.income}}</div>
                     </div>
                     <div class="shouyifrom flexbet">
                         <span>收益来源</span>
-                        <span>商城</span>
+                        <span>{{title}}</span>
                     </div>
                 </div>
                 <div class="flexbet detail">
@@ -43,5 +44,62 @@
         </div>
     </div>
 </body>
+<script>
+
+
+    new Vue({
+        el: "#page",
+        data: {
+            title: '',
+            tomorrow: '',
+            list: [],
+            running: false,
+            incomeType: ''
+        },
+        mounted() {
+            console.log(getParams())
+            let obj = typename.filter(item => item.type == getParams().type)[0]
+            this.title = obj.name;
+            this.incomeType = obj.number;
+            var today = new Date();
+            this.tomorrow = today.getTime() + 1000 * 60 * 60 * 24;
+            this.getlist(this.tomorrow, 0);
+        },
+        methods: {
+            getlist(day, count) {
+                this.running = true;
+                let that = this;
+                let thistime = formatTimeTwo(day - 1000 * 60 * 60 * 24, 'Y-M-D');
+                let params = {
+                    // limit		number	
+                    // page		number
+                    incomeType: this.incomeType,
+                    nextDay: thistime + ' 00:00:00'
+                }
+                postRequest(api.dayIncome, params, res => {
+                    count++;
+                    that.list.push(Object.assign({ time: thistime }, res));
+                    this.tomorrow = day - 1000 * 60 * 60 * 24;
+                    console.log(thistime)
+                    if (count == 10) {
+                        this.running = false
+                    } else {
+                        that.getlist(that.tomorrow, count)
+                    }
+                })
+            },
+            activityScroll() {
+                var clientHeight = this.$refs.activity_scroll.clientHeight; //该容器的固定高度
+                var scrollTop = this.$refs.activity_scroll.scrollTop; //滚动条距顶部的距离
+                var scrollHeight = this.$refs.activity_scroll.scrollHeight; //内容的高度
+                if (scrollHeight - scrollTop <= clientHeight) {
+                    if (!this.running) {
+                        this.getlist(this.tomorrow, 0);
+                    }
+                }
+            },
+        }
+    })
+</script>
 
 </html>

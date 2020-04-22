@@ -147,7 +147,9 @@
                 }
 
                 loginRequest(params, res => {
-                    console.log(res)
+                    console.log(res);
+                    setToken(res);
+                    location.href = './mymoney.html';
                 })
                 // Request('post', api.login, params).then(res => {
                 //     console.log(res)
