@@ -13,7 +13,7 @@
 <!-- <script src="/js/axios.js"></script> -->
 <script src="/js/request.js"></script>
 
-<script>
+<!-- <script>
     // ----------完全加载前的loading页面----------
     //监听加载状态改变
     document.onreadystatechange = completeLoading;
@@ -25,7 +25,7 @@
             loadingMask.parentNode.removeChild(loadingMask);
         }
     }
-</script>
+</script> -->
 
 <body>
     <div id=loadingDiv
@@ -35,7 +35,7 @@
     </div>
     <div id="app">
 
-        <div>
+        <div class="toptop">
             <img src='/img/register3/背景@2x.png' class='topbg' mode="widthFix" />
         </div>
         <div class="bottom">
@@ -54,24 +54,24 @@
                             style="width:16px;height:16px;" @click='eyebtn'>
                     </div>
                 </div>
-                <div class="iptcode inpsize ipt">
+                <!-- <div class="iptcode inpsize ipt">
                     <input type="number" class="codeinput" placeholder="请输入验证码" v-model='code'>
                     <div class="getcode">
                         <div v-if='canGetCode' class="getcode-text" v-on:click="getcode">获取验证码</div>
                         <div v-else class="getcode-text getcode-num">{{codetime}} 秒</div>
                     </div>
-                </div>
+                </div> -->
 
                 <div class="register" v-on:click="register">立即注册</div>
                 <div class="tips">注册即表示同意
                     <span class="tips-detail">《注册用户协议》</span>
                 </div>
 
-                <div class="sharebox">
+                <!-- <div class="sharebox">
                     <img class="icon" src="/img/register3/QQ @2x.png" @click="login()" />
                     <img class="icon" src="/img/register3/新浪@2x.png" />
                     <img class="icon" src="/img/register3/微信@2x.png" />
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -101,13 +101,13 @@
                     alert('请输入6-32位字母、数字以及下划线的密码');
                     return;
                 };
-                if (!this.code) {
-                    alert('请输入验证码');
-                    return;
-                };
+                // if (!this.code) {
+                //     alert('请输入验证码');
+                //     return;
+                // };
                 console.log(this.phone, this.password, this.code)
 
-
+                this.login()
             },
             getcode() {
                 this.canGetCode = false;
@@ -142,11 +142,12 @@
                 let params = {
                     // password	用户密码, 暂时明文传输	string	必填
                     // userName	用户名	string	必填
-                    password: '123456',
-                    userName: 18081877581
+                    password: this.password,
+                    userName: this.phone
                 }
 
                 loginRequest(params, res => {
+                    setUserName(params.userName)
                     console.log(res);
                     setToken(res);
                     location.href = './mymoney.html';

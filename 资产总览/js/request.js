@@ -70,6 +70,19 @@ function getToken() {
     return "";
 }
 
+function setUserName(cvalue) {
+    document.cookie = "userName=" + cvalue
+};
+function getUserName() {
+    var name = 'userName' + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i].trim();
+        if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+    }
+    return "";
+}
+
 
 var url = '',
     productEnvironment = true,
@@ -105,9 +118,10 @@ var Request = function (method, api, params, success, fail) {
         } else if (code == 403) {
             // 原缓存存在token，过期了
             if (getToken()) {
-                // setToken("");
+                setToken("");
+                setUserName('')
                 alert('登录信息已过期,请重新登录');
-                // location.href = '../register.html';
+                location.href = '../register.html';
             } else {
                 location.href = '../register.html';
             }

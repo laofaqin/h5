@@ -13,6 +13,11 @@
 <script src="/js/request.js"></script>
 
 <body>
+    <div id=loadingDiv
+        style="position: fixed;width:100vw;height: 100vh; background:#E9EDF0;z-index:999;display: flex;flex-direction: column;justify-content: center;align-items: center;">
+        <img src="./img/loading.gif" style="width:50px;height:50px;">
+        <span>加载中...</span>
+    </div>
     <div id="page">
         <div class="title">
             <div class="backiconbox">
@@ -21,7 +26,7 @@
             <span>{{title}}</span>
         </div>
         <div class="content" ref="activity_scroll" @scroll="activityScroll">
-            <div class="item" v-for="item in list">
+            <div class="item transtion" v-for="item in list" @click="toDetail(item.time)">
                 <div class="headtime">{{item.time}}</div>
                 <div class="about">
                     <div class="shouyi flexbet">
@@ -40,6 +45,9 @@
                     <span>查看详情</span>
                     <img src="/img/arrow.png" class="backicon" alt="" />
                 </div>
+            </div>
+            <div class="loading">
+                <img src="./img/loading.gif" alt="">
             </div>
         </div>
     </div>
@@ -80,24 +88,29 @@
                     count++;
                     that.list.push(Object.assign({ time: thistime }, res));
                     this.tomorrow = day - 1000 * 60 * 60 * 24;
-                    console.log(thistime)
+                    // console.log(thistime)
                     if (count == 10) {
                         this.running = false
                     } else {
-                        that.getlist(that.tomorrow, count)
+                        that.getlist(that.tomorrow, count);
                     }
                 })
             },
             activityScroll() {
-                var clientHeight = this.$refs.activity_scroll.clientHeight; //该容器的固定高度
-                var scrollTop = this.$refs.activity_scroll.scrollTop; //滚动条距顶部的距离
-                var scrollHeight = this.$refs.activity_scroll.scrollHeight; //内容的高度
-                if (scrollHeight - scrollTop <= clientHeight) {
+                let clientHeight = this.$refs.activity_scroll.clientHeight; //该容器的固定高度
+                let scrollTop = this.$refs.activity_scroll.scrollTop; //滚动条距顶部的距离
+                let scrollHeight = this.$refs.activity_scroll.scrollHeight; //内容的高度
+
+                if (scrollHeight - scrollTop - 50 <= clientHeight) { //50为距离底部多少时触发触底事件
                     if (!this.running) {
                         this.getlist(this.tomorrow, 0);
                     }
                 }
             },
+            toDetail(e) {
+                console.log(e)
+                location.href = "./detail.html?type=" + this.incomeType + "&time=" + e
+            }
         }
     })
 </script>

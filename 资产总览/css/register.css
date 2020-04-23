@@ -1,10 +1,12 @@
-body{
-    background:#F4F1F4;
+body {
+    background: #F4F1F4;
 }
-*{
-    margin:0;
-    padding:0;
+
+* {
+    margin: 0;
+    padding: 0;
 }
+
 .topbg {
     width: 100%;
     display: block;
@@ -13,6 +15,11 @@ body{
 .bottom {
     background: #F4F1F4;
     position: relative;
+    flex: 1;
+}
+
+.toptop {
+    flex-shrink: 0;
 }
 
 .contain {
@@ -23,6 +30,7 @@ body{
     left: 0;
     right: 0;
     border-radius: .14rem;
+    height: 100%;
 }
 
 .logobox {
@@ -75,7 +83,7 @@ body{
 .getcode-text {
     font-size: .24rem;
     color: #FF9A1F;
-    border-left:1px solid #FF9A1F;
+    border-left: 1px solid #FF9A1F;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -84,14 +92,15 @@ body{
     height: .40rem;
     /* background:#ccc; */
 }
-.getcode-text:active{
+
+.getcode-text:active {
     opacity: .8;
     transform: scale(.98);
 }
 
 .getcode-num {
     color: #ccc;
-} 
+}
 
 .tips {
     font-size: .30rem;
@@ -141,25 +150,36 @@ body{
     width:100%;
     height: 0.9rem;
 } */
-.inpcode{
+
+.inpcode {
     height: 100%;
     display: flex;
 }
-.codeinput{
-    flex:1;
-}
-.inpsize input{
-    border:none;
-    flex:1;
-}
-.inpsize input:focus{
-    outline:none;
 
+.codeinput {
+    flex: 1;
+}
+
+.inpsize input {
+    border: none;
+    flex: 1;
+}
+
+.inpsize input:focus {
+    outline: none;
     /* border: 1px solid red; */
 }
-.eyebox{
+
+.eyebox {
     display: flex;
     justify-content: center;
     align-items: center;
     padding-right: .2rem;
+}
+
+#app {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
 }
