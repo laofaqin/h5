@@ -1,5 +1,5 @@
-document.write("<script language=javascript src='/js/api.js'></script>");
-document.write("<script language=javascript src='/js/axios.js'></script>");
+document.write("<script language=javascript src='./js/api.js'></script>");
+document.write("<script language=javascript src='./js/axios.js'></script>");
 
 
 var typename = [
@@ -122,9 +122,9 @@ var Request = function (method, api, params, success, fail) {
                 setToken("");
                 setUserName('')
                 alert('登录信息已过期,请重新登录');
-                location.href = '../register.html';
+                location.href = './register.html';
             } else {
-                location.href = '../register.html';
+                location.href = './register.html';
             }
             // 原缓存没有token，即没绑定
         } else {

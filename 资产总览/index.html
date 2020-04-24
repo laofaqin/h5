@@ -4,12 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>资产总览</title>
+    <title>新银众商</title>
 </head>
 <link rel="stylesheet" href="./css/index.css">
-<script src="/js/fontsize.js"></script>
-<script src="/js/vue.min.js"></script>
-<script src="/js/request.js"></script>
+<script src="./js/fontsize.js"></script>
+<script src="./js/vue.min.js"></script>
+<script src="./js/request.js"></script>
 
 <body>
     <div id=loadingDiv
@@ -51,7 +51,7 @@
         </div>
 
         <div class="list" @click="toSomewhere($event)">
-            <div id="zichan" class="listItem " @click='toRecord($event)'>
+            <div id="zichan" class="listItem ">
                 <div class="name">资产总记录</div>
                 <img src="./img/arrow.png" class="arrow" alt="">
             </div>
@@ -130,10 +130,12 @@
             toSomewhere(e) {
                 console.log(e)
                 let target = e.srcElement || e.target;
-                if (target.id == 'zichan') {
+                if (target.id == 'zichan' || e.path[1].id == 'zichan') {
                     location.href = "./record.html"
                 } else if (target.id) {
                     location.href = "./part.html?type=" + target.id;
+                } else if (e.path[1].id) {
+                    location.href = "./part.html?type=" + e.path[1].id;
                 }
             }
         },
