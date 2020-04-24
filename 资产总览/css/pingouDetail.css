@@ -1,0 +1,16 @@
+.item {
+    font-size: .2rem;
+    padding: .2rem .3rem;
+    color: rgba(92, 92, 92, 1);
+}
+
+.item-label {
+    color: #333;
+}
+
+.headitem {
+    padding: .3rem;
+    color: #333;
+    font-size: .2rem;
+    border-bottom: 1px solid #E9EDF0;
+}

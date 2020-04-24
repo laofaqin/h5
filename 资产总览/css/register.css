@@ -115,7 +115,7 @@ body {
 }
 
 .register {
-    margin: 0 auto;
+    margin: 30px auto;
     font-size: .30rem;
     font-family: PingFang SC;
     font-weight: bold;
@@ -163,6 +163,7 @@ body {
 .inpsize input {
     border: none;
     flex: 1;
+    background: white;
 }
 
 .inpsize input:focus {

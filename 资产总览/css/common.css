@@ -50,6 +50,7 @@
     width: 100%;
     font-size: 0;
     text-align: center;
+    background: #E9EDF0;
 }
 
 .loading img {
@@ -62,4 +63,10 @@
     font-size: .2rem;
     color: #777;
     line-height: 35px;
+}
+
+.kong {
+    background: #E9EDF0;
+    height: .2rem;
+    width: 100%;
 }

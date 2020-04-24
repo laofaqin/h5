@@ -12,8 +12,9 @@ var typename = [
     { "type": "gongxiang", "name": "共享奖励", number: 7 },
     { "type": "shangcheng", "name": "商城收益", number: 2 },
     { "type": "xianshang", "name": "线上收益", number: 11 },
-    { "type": "huokuan", "name": "货款收入", number: 8 }
-];
+    { "type": "huokuan", "name": "货款收入", number: 8 },
+    { "type": "pingou", "name": "拼购收益", number: null },
+    { "type": "guanggao", "name": "广告收益", number: null }, ];
 
 function goback() {
     window.history.back();

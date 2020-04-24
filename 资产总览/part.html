@@ -25,7 +25,7 @@
             </div>
             <span>{{title}}</span>
         </div>
-        <div class="content" ref="activity_scroll" @scroll="activityScroll">
+        <div class="content" ref="activity_scroll" @scroll="activityScroll" v-if=" type!='pingou' && type!='guanggao'">
             <div class="item transtion" v-for="item in list" @click="toDetail(item.time)">
                 <div class="headtime">{{item.time}}</div>
                 <div class="about">
@@ -50,6 +50,88 @@
                 <img src="./img/loading.gif" alt="">
             </div>
         </div>
+        <!-- 拼购区 -->
+        <div class="content" ref="activity_scroll" @scroll="activityScroll" v-if="type =='pingou'">
+            <div class="item transtion" v-for="item in list" @click="toPingouDetail">
+                <div class="headtime">{{item.addTime}}</div>
+                <div class="about">
+                    <div class="shouyi flexbet">
+                        <div class="shouyiLeft">
+                            <img src="/img/moneyicon.png" alt="" class="headicon" />
+                            <span>本次收益</span>
+                        </div>
+                        <div class="shouyiRight" style="color:#ff4f00">{{item.storeTotalAmount|money}}</div>
+                    </div>
+                    <div class="shouyifrom flexbet">
+                        <span>收益类型</span>
+                        <span>{{item.rebateInfoDes}}</span>
+                    </div>
+                    <div class="shouyifrom flexbet">
+                        <span>拼购单号</span>
+                        <span>{{item.groupBuyingListId}}</span>
+                    </div>
+                    <div class="shouyifrom flexbet">
+                        <span>商城商品总额</span>
+                        <span>{{item.platGoodsTotalPrice|money}}</span>
+                    </div>
+                    <div class="shouyifrom flexbet">
+                        <span>商城商品收益</span>
+                        <span style="color:#ff4f00">{{item.storePgAmount|money}}</span>
+                    </div>
+                    <div class="shouyifrom flexbet">
+                        <span>自营商品总额</span>
+                        <span>{{item.storeGoodsTotalPrice|money}}</span>
+                    </div>
+                    <div class="shouyifrom flexbet">
+                        <span>自营商品收益</span>
+                        <span style="color:#ff4f00">{{item.storeSgAmount|money}}</span>
+                    </div>
+                </div>
+                <!-- <div class="flexbet detail">
+                    <span>查看详情</span>
+                    <img src="/img/arrow.png" class="backicon" alt="" />
+                </div> -->
+            </div>
+            <div class="loading">
+                <img src="./img/loading.gif" v-if="!loadEnd" alt="">
+                <span v-else>没有更多数据</span>
+            </div>
+        </div>
+        <!-- 广告区域 -->
+        <div class="content" ref="activity_scroll" @scroll="activityScroll" v-if="type =='guanggao'">
+            <div class="item transtion" v-for="item in list" @click="">
+                <div class="headtime">{{item.addTime}}</div>
+                <div class="about">
+                    <div class="shouyi flexbet">
+                        <div class="shouyiLeft">
+                            <img src="/img/moneyicon.png" alt="" class="headicon" />
+                            <span>本次收益</span>
+                        </div>
+                        <div class="shouyiRight" style="color:#ff4f00">{{item.totalPrice|money2}}</div>
+                    </div>
+                    <div class="shouyifrom flexbet">
+                        <span>收益类型</span>
+                        <span>{{item.tag}}</span>
+                    </div>
+                    <div class="shouyifrom flexbet">
+                        <span>订单号</span>
+                        <span>{{item.orderNumber}}</span>
+                    </div>
+                    <div class="shouyifrom flexbet">
+                        <span>分润金额</span>
+                        <span>￥{{item.amount}}</span>
+                    </div>
+                    <div class="shouyifrom flexbet">
+                        <span>播放轮次</span>
+                        <span>{{item.playCount}}轮次</span>
+                    </div>
+                </div>
+            </div>
+            <div class="loading">
+                <img src="./img/loading.gif" v-if="!loadEnd" alt="">
+                <span v-else>没有更多数据</span>
+            </div>
+        </div>
     </div>
 </body>
 <script>
@@ -59,19 +141,32 @@
         el: "#page",
         data: {
             title: '',
+            type: '',
             tomorrow: '',
             list: [],
             running: false,
-            incomeType: ''
+            incomeType: '',
+            page: 1,
+            loadEnd: false
         },
         mounted() {
             console.log(getParams())
+            this.type = getParams().type;
             let obj = typename.filter(item => item.type == getParams().type)[0]
             this.title = obj.name;
             this.incomeType = obj.number;
             var today = new Date();
             this.tomorrow = today.getTime() + 1000 * 60 * 60 * 24;
-            this.getlist(this.tomorrow, 0);
+            if (this.type != 'pingou' && this.type != 'guanggao') {
+                this.getlist(this.tomorrow, 0);
+            } else if (this.type == 'pingou') {
+                console.log('pingou')
+                this.getGroupbuyIncome(true);
+            } else if (this.type == 'guanggao') {
+                console.log('guagngao');
+                this.adIncomeMethod(true);
+            }
+
         },
         methods: {
             getlist(day, count) {
@@ -101,15 +196,74 @@
                 let scrollTop = this.$refs.activity_scroll.scrollTop; //滚动条距顶部的距离
                 let scrollHeight = this.$refs.activity_scroll.scrollHeight; //内容的高度
 
-                if (scrollHeight - scrollTop - 50 <= clientHeight) { //50为距离底部多少时触发触底事件
+                if (scrollHeight - scrollTop <= clientHeight) { //50为距离底部多少时触发触底事件
                     if (!this.running) {
-                        this.getlist(this.tomorrow, 0);
+                        if (this.type != 'pingou' && this.type != 'guanggao') {
+                            this.getlist(this.tomorrow, 0);
+                        } else if (this.type == 'pingou') {
+                            console.log('pingou')
+                            this.getGroupbuyIncome(false);
+                        } else if (this.type == 'guanggao') {
+                            console.log('guagngao');
+                            this.adIncomeMethod(false);
+                        }
                     }
                 }
             },
             toDetail(e) {
-                console.log(e)
                 location.href = "./detail.html?type=" + this.incomeType + "&time=" + e
+            },
+            getGroupbuyIncome(refresh) {
+                this.running = true;
+                if (this.loadEnd && !refresh) {
+                    this.running = false;
+                    return;
+                };
+                if (refresh) {
+                    this.page = 1;
+                }
+                let params = {
+                    page: this.page
+                }
+                postRequest(api.groupbuyInter, params, res => {
+                    this.page = params.page + 1;
+                    this.loadEnd = res.currPage >= res.totalPage;
+                    let templist = refresh ? [] : this.list;
+                    this.list = templist.concat(res.list)
+                    this.running = false;
+                })
+            },
+            adIncomeMethod(refresh) {
+                this.running = true;
+                if (this.loadEnd && !refresh) {
+                    this.running = false;
+                    return;
+                };
+                if (refresh) {
+                    this.page = 1;
+                }
+                let params = {
+                    page: this.page
+                };
+                postRequest(api.adInter, params, res => {
+                    this.page = params.page + 1;
+                    this.loadEnd = res.currPage >= res.totalPage;
+                    let templist = refresh ? [] : this.list;
+                    this.list = templist.concat(res.list)
+                    this.running = false;
+                })
+            },
+            toPingouDetail() {
+                // console.log('2')
+                // location.href = './pingouDetail.html?ordernum='
+            }
+        },
+        filters: {
+            money(e) {
+                return '￥' + e.toFixed(3);
+            },
+            money2(e) {
+                return '￥' + e.toFixed(2);
             }
         }
     })
