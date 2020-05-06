@@ -67,9 +67,9 @@
 			</div>
 			<div class="changeinfo" id="codeInput" style="display: none;">
 				<div class="label">设置密码和验证码</div>
-				<div><input type="password" id="password" class="input" placeholder="设置密码"></div>
+				<div><input type="password" id="password" class="input" placeholder="设置密码" onfocus="setScrollTop()" onblur="setScrollTop()" ></div>
 				<div class="codebox">
-					<input type="number" maxlength="11" class="input" id='smsCode' placeholder="输入验证码">
+					<input type="number" maxlength="11" class="input" id='smsCode' placeholder="输入验证码" onfocus="setScrollTop()" onblur="setScrollTop()" >
 					<div class="getcode" onclick="sendSms()" id='send'>点击获取</div>
 					<div class="getcode disable" style="display:none;" id='intNumber'></input></div>
 				</div>
