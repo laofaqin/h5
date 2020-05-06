@@ -53,7 +53,8 @@
 			</div>
 
 		</div>
-		<div class="infobigbox" onclick="showLoginBox(false)" id="infobigbox" style="background:black;opacity: .5;"></div>
+		<div class="infobigbox" onclick="showLoginBox(false)" id="infobigbox" style="background:black;opacity: .5;">
+		</div>
 		<div class="infobox" id="infobox" style="display: none;">
 			<div class="info-top">
 				<img src="./img/invite/xyicon100.png" class="infobox-icon" alt="">
@@ -61,12 +62,12 @@
 			</div>
 			<div class="changeinfo" id="phoneInput">
 				<div class="label" id="proInfo">邀请您加入新银乐购</div>
-				<div><input type="number" id="phone" maxlength="11" class="input" placeholder="请输入手机号"></div>
+				<div><input type="number" id="phone" maxlength="11" class="input" placeholder="请输入手机号" onfocus="setScrollTop()" onblur="setScrollTop()" ></div>
 				<div class="nextbtn" onclick="firstBind()">下一步</div>
 			</div>
 			<div class="changeinfo" id="codeInput" style="display: none;">
 				<div class="label">设置密码和验证码</div>
-				<div><input type="password" id="password"  class="input" placeholder="设置密码"></div>
+				<div><input type="password" id="password" class="input" placeholder="设置密码"></div>
 				<div class="codebox">
 					<input type="number" maxlength="11" class="input" id='smsCode' placeholder="输入验证码">
 					<div class="getcode" onclick="sendSms()" id='send'>点击获取</div>
@@ -81,8 +82,8 @@
 			<div class="sucess-title">恭喜您，注册成功</div>
 			<div class="sucess-desc">恭喜您加入新银乐购, 马上开启乐购新生活</div>
 			<div class="sucess-btn">
-			<a href="https://a.app.qq.com/o/simple.jsp?pkgname=com.newly.silver.o2o">立即下载体验</a>
-			<a href="" id="payurl" style="display: none;">立即去支付</a>
+				<a href="https://a.app.qq.com/o/simple.jsp?pkgname=com.newly.silver.o2o">立即下载体验</a>
+				<a href="" id="payurl" style="display: none;">立即去支付</a>
 			</div>
 		</div>
 		<div class="sucess" id="fail" style="display: none;">
@@ -99,7 +100,7 @@
 		openId = getQueryString('openid'),
 		alipayId = getQueryString('alipayid'),
 		proCode = getQueryString('promoter'),
-		srcType= getQueryString('srcType'),
+		srcType = getQueryString('srcType'),
 		wxcode = getQueryString('code'),
 		storeName = getQueryString('storename'),
 		phone = '',
@@ -108,27 +109,27 @@
 		baseURL = 'https://hope-user.xy999888.com/api/users/',
 		code = '';
 	var proInfo = $("#proInfo")
-	
-	if(proCode){
+
+	if (proCode) {
 		getOpenid();
 		$.ajax({
-		url: baseURL + "user/promoter/" + proCode,
-		type: "get",
-		contentType: "application/json", 
-		success: function(data) {
-				if(data.code == 0) {
+			url: baseURL + "user/promoter/" + proCode,
+			type: "get",
+			contentType: "application/json",
+			success: function (data) {
+				if (data.code == 0) {
 					proUserId = data.data.id;
 					var prophone = data.data.userName
 					proInfo.html(prophone + ":" + proInfo.html())
-					
+
 					//获取openid
-					
+
 				} else {
 					alert(data.message)
 				}
 			}
 		});
-	}else{
+	} else {
 		if (storeId == null || storeId == '') {
 			alert('店铺信息错误，请重新注册')
 			window.history.back();
@@ -139,9 +140,9 @@
 			window.history.back();
 		}
 	}
-	
-	
-	if(storeName && storeName != '') {	
+
+
+	if (storeName && storeName != '') {
 		proInfo.html(storeName + ":" + proInfo.html())
 	}
 
@@ -187,7 +188,7 @@
 			alert("请输入验证码")
 			return false;
 		}
-		if(!password) {
+		if (!password) {
 			alert("请输入密码")
 			return false;
 		}
@@ -232,7 +233,7 @@
 			success: function (data) {
 
 				if (data.code == 0) {
-					
+
 					var num = 120;
 					var timeId;
 					var sendIntevral = $("#intNumber")
@@ -256,17 +257,17 @@
 			}
 		});
 	}
-	
-	function getOpenid(){
-		if(!wxcode){
+
+	function getOpenid() {
+		if (!wxcode) {
 			return
 		}
 		$.ajax({
-		url: baseURL + "user/getOpenIdByCode/" + wxcode,
-		type: "get",
-		contentType: "application/json", 
-		success: function(data) {
-				if(data.code == 0) {
+			url: baseURL + "user/getOpenIdByCode/" + wxcode,
+			type: "get",
+			contentType: "application/json",
+			success: function (data) {
+				if (data.code == 0) {
 					openId = data.data.openId
 
 				} else {
@@ -306,8 +307,8 @@
 	// 注册成功
 	function showSucess(show) {
 		var realMoney = document.getElementById("sucess");
-		if(retUrl && retUrl != ''){
-				//window.location.href = retUrl
+		if (retUrl && retUrl != '') {
+			//window.location.href = retUrl
 		}
 		if (show) {
 			showGetPhoneInput(false);
@@ -354,7 +355,12 @@
 		});
 		return result;
 	}
-	
+
+	function setScrollTop() {
+		let scrollTop = document.body.scrollTop + document.documentElement.scrollTop;
+		window.scrollTo(0, scrollTop);
+	}
+
 </script>
 
 
