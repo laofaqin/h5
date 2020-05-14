@@ -144,9 +144,9 @@
 	// document.body.addEventListener('focusout', () => { // 软键盘关闭事件
 	// 	window.scroll(0, 0) // 失焦后强制让页面归位 
 	// })
-	$("input").focusout(function () {
-		window.scroll(0, 0) // 失焦后强制让页面归位 
-	});
+	// $("input").focusout(function () {
+	// 	window.scroll(0, 0) // 失焦后强制让页面归位 
+	// });
 	$(".inpAbsolute").click(function(e){
 		console.log(e);
 		$(e.target).parent().children('input').focus();
