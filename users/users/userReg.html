@@ -31,7 +31,7 @@
 
 <body>
 	<div id=loadingDiv
-		style="position: fixed;width:100vw;height: 100vh; background:#E9EDF0;z-index:999;display: flex;flex-direction: column;justify-content: center;align-items: center;">
+		style="position: fixed;width:100vw;height: 100vh; background:#E9EDF0;z-index:999;display: flex;flex-direction: column;justify-content: center;align-items: center;font-size: 14px;">
 		<img src="./img/loading.gif" style="width:50px;height:50px;">
 		<span>加载中...</span>
 	</div>
@@ -65,12 +65,12 @@
 				<div class="label" id="proInfo">邀请您加入新银乐购</div>
 				<div>
 					<input type="number" id="phone" maxlength="11" class="input" placeholder="请输入手机号"
-						onfocus="setScrollTop()" onblur="setScrollTop()">
+						>
 				</div>
 				<!-- 推荐人手机号输入框 (链接带有推荐人的时候隐藏)-->
 				<div id="promoterBox" style="display:none">
 					<input type="number" id="PromoterPhone" maxlength="11" class="input" placeholder="请输入推荐人手机号"
-						onfocus="setScrollTop()" onblur="setScrollTop()">
+						>
 				</div>
 				<!-- 利用jQuery完成隐藏和显示: $("#id").show();$("#id").hide() -->
 
@@ -82,7 +82,7 @@
 						onblur="setScrollTop()"></div>
 				<div class="codebox">
 					<input type="number" maxlength="11" class="input" id='smsCode' placeholder="输入验证码"
-						onfocus="setScrollTop()" onblur="setScrollTop()">
+						>
 					<div class="getcode" onclick="sendSms()" id='send'>点击获取</div>
 					<div class="getcode disable" style="display:none;" id='intNumber'></input></div>
 				</div>
@@ -109,9 +109,15 @@
 	</div>
 </body>
 <script>
+	// 为了兼容i7,
 	$(document).on("click", "#useItBtn", function () {
 		showLoginBox(true);
 	});
+
+	// 兼容ios 软键盘收起之后不会弹导致无法聚焦input
+	document.body.addEventListener('focusout', () => { // 软键盘关闭事件
+		window.scroll(0, 0) // 失焦后强制让页面归位 
+	})
 </script>
 <script>
 	var storeId = getQueryString('storeid'),
