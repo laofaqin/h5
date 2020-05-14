@@ -18,6 +18,22 @@
 	.iosCanClick {
 		cursor: pointer
 	}
+
+	.inpRelative {
+		position: relative;
+	}
+
+	.inpAbsolute {
+		position: absolute;
+		top: 0;
+		left: 0;
+		display: block;
+		height: 100%;
+		width: 100%;
+	}
+	.flex1{
+		flex:1
+	}
 </style>
 <script src="js/fontsize.js"></script>
 <script type="text/javascript" src="js/jquery.min.js"></script>
@@ -69,12 +85,14 @@
 			<div class="changeinfo" id="phoneInput">
 				<!-- 当链接里没有推荐人id的时候(新需求),此处隐藏,下面将多一个推荐人手机号输入框 -->
 				<div class="label" id="proInfo">邀请您加入新银乐购</div>
-				<div>
-					<input type="number" id="phone" maxlength="11" class="input" placeholder="请输入手机号">
+				<div class="inpRelative">
+					<input type="number" id="phone" maxlength="11" class="input " placeholder="请输入手机号">
+					<span class="inpAbsolute"></span>
 				</div>
 				<!-- 推荐人手机号输入框 (链接带有推荐人的时候隐藏)-->
-				<div id="promoterBox" style="display:none">
+				<div id="promoterBox" class="inpRelative" style="display:none">
 					<input type="number" id="PromoterPhone" maxlength="11" class="input" placeholder="请输入推荐人手机号">
+					<span class="inpAbsolute"></span>
 				</div>
 				<!-- 利用jQuery完成隐藏和显示: $("#id").show();$("#id").hide() -->
 
@@ -82,11 +100,17 @@
 			</div>
 			<div class="changeinfo" id="codeInput" style="display: none;">
 				<div class="label">设置密码和验证码</div>
-				<div><input type="password" id="password" class="input" placeholder="设置密码"></div>
-				<div class="codebox">
-					<input type="number" maxlength="11" class="input" id='smsCode' placeholder="输入验证码">
+				<div class="inpRelative">
+					<input type="password" id="password" class="input" placeholder="设置密码">
+					<span class="inpAbsolute"></span>
+				</div>
+				<div class="codebox ">
+					<div class="inpRelative flex1" >
+						<input type="number" maxlength="11" class="input" id='smsCode' placeholder="输入验证码">
+						<span class="inpAbsolute"></span>
+					</div>
 					<div class="getcode iosCanClick" onclick="sendSms()" id='send'>点击获取</div>
-					<div class="getcode disable" style="display:none;" id='intNumber'></input></div>
+					<div class="getcode disable" style="display:none;" id='intNumber'></div>
 				</div>
 				<div class="nextbtn iosCanClick" onclick="secondBind()">下一步</div>
 			</div>
@@ -123,6 +147,10 @@
 	$("input").focusout(function () {
 		window.scroll(0, 0) // 失焦后强制让页面归位 
 	});
+	$(".inpAbsolute").click(function(e){
+		console.log(e);
+		$(e.target).parent().children('input').focus();
+	})
 </script>
 <script>
 	var storeId = getQueryString('storeid'),
@@ -250,42 +278,42 @@
 		});
 	}
 
-	function sendSms() {
-		if (!phone) {
-			alert("手机号码输入错误 " + phone);
-		}
+	// function sendSms() {
+	// 	if (!phone) {
+	// 		alert("手机号码输入错误 " + phone);
+	// 	}
 
-		$.ajax({
-			url: "https://hope-system.xy999888.com/api/users/sms/send/register/" + phone,
-			type: "get",
-			contentType: "application/json",
-			success: function (data) {
+	// 	$.ajax({
+	// 		url: "https://hope-system.xy999888.com/api/users/sms/send/register/" + phone,
+	// 		type: "get",
+	// 		contentType: "application/json",
+	// 		success: function (data) {
 
-				if (data.code == 0) {
+	// 			if (data.code == 0) {
 
-					var num = 120;
-					var timeId;
-					var sendIntevral = $("#intNumber")
-					var send = $("#send")
-					send.hide()
-					sendIntevral.show();
-					timeId = setInterval(function () {
-						num--;
-						sendIntevral.html(num)
-						if (num == 0) {
-							clearInterval(timeId);
-							send.show()
-							sendIntevral.hide()
-						}
-					}, 1000);
-					// alert("已发送验证码，请注意查收");
-				} else {
-					alert(data.message);
-					return;
-				}
-			}
-		});
-	}
+	// 				var num = 120;
+	// 				var timeId;
+	// 				var sendIntevral = $("#intNumber")
+	// 				var send = $("#send")
+	// 				send.hide()
+	// 				sendIntevral.show();
+	// 				timeId = setInterval(function () {
+	// 					num--;
+	// 					sendIntevral.html(num)
+	// 					if (num == 0) {
+	// 						clearInterval(timeId);
+	// 						send.show()
+	// 						sendIntevral.hide()
+	// 					}
+	// 				}, 1000);
+	// 				// alert("已发送验证码，请注意查收");
+	// 			} else {
+	// 				alert(data.message);
+	// 				return;
+	// 			}
+	// 		}
+	// 	});
+	// }
 
 	function getOpenid() {
 		if (!wxcode) {
