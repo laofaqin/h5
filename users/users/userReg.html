@@ -68,7 +68,7 @@
 			</div>
 			<div class="changeinfo" id="phoneInput">
 				<!-- 当链接里没有推荐人id的时候(新需求),此处隐藏,下面将多一个推荐人手机号输入框 -->
-				<div class="label" id="proInfo">邀请您加入新银乐购</div>
+				<div class="label" id="proInfo">邀请您加入新银乐购</div> 
 				<div>
 					<input type="number" id="phone" maxlength="11" class="input" placeholder="请输入手机号">
 				</div>
@@ -86,7 +86,7 @@
 				<div class="codebox">
 					<input type="number" maxlength="11" class="input" id='smsCode' placeholder="输入验证码">
 					<div class="getcode iosCanClick" onclick="sendSms()" id='send'>点击获取</div>
-					<div class="getcode disable" style="display:none;" id='intNumber'></input></div>
+					<div class="getcode disable" style="display:none;" id='intNumber'></div>
 				</div>
 				<div class="nextbtn iosCanClick" onclick="secondBind()">下一步</div>
 			</div>
@@ -120,9 +120,9 @@
 	// document.body.addEventListener('focusout', () => { // 软键盘关闭事件
 	// 	window.scroll(0, 0) // 失焦后强制让页面归位 
 	// })
-	$('input').focusout(()=>{
-		window.scroll(0, 0) // 失焦后强制让页面归位 
-	});
+	$('input').focusout(	function(){
+window.scroll(0, 0)
+});
 </script>
 <script>
 	var storeId = getQueryString('storeid'),
@@ -131,6 +131,7 @@
 		proCode = getQueryString('promoter'),
 		srcType = getQueryString('srcType'),
 		wxcode = getQueryString('code'),
+		proReg = getQueryString('proReg'),
 		storeName = getQueryString('storename'),
 		phone = '',
 		retUrl = decodeURIComponent(getQueryString('returl')),
@@ -159,14 +160,18 @@
 			}
 		});
 	} else {
-		if (storeId == null || storeId == '') {
-			alert('店铺信息错误，请重新注册')
-			window.history.back();
-		}
+		if(proReg && proReg == "1"){
+			$("#promoterBox").show()
+		}else{
+			if (storeId == null || storeId == '') {
+				alert('店铺信息错误，请重新注册')
+				window.history.back();
+			}
 
-		if (openId == '' && alipayId == '') {
-			alert('注册信息错误，请重新注册')
-			window.history.back();
+			if (openId == '' && alipayId == '') {
+				alert('注册信息错误，请重新注册')
+				window.history.back();
+			}
 		}
 	}
 
@@ -176,6 +181,31 @@
 	}
 
 	function firstBind() {
+		if(proReg && proReg == "1"){
+			var pp = $("#PromoterPhone").val();
+			if(pp == null || pp == ''){
+				alert("请输入推荐人号码")
+				return
+			}
+			
+			getOpenid();
+			$.ajax({
+			url: baseURL + "user/getPromoter/" + pp,
+			type: "get",
+			contentType: "application/json",
+			success: function (data) {
+					if (data.code == 0) {
+						proUserId = data.data.id;
+						var prophone = data.data.userName
+						proInfo.html(prophone + ":" + proInfo.html())
+
+					} else {
+						alert(data.message)
+					}
+				}
+			});
+			
+		}
 		var inphone = document.getElementById("phone").value;
 
 		if (!checkPhone(inphone)) {
@@ -339,8 +369,9 @@
 	// 注册成功
 	function showSucess(show) {
 		var realMoney = document.getElementById("sucess");
-		if (retUrl && retUrl != '') {
-			//window.location.href = retUrl
+		console.log('retUrl : ' + retUrl.length)
+		if (retUrl.length > 20) {
+			window.location.href = retUrl
 		}
 		if (show) {
 			showGetPhoneInput(false);
@@ -391,7 +422,5 @@
 		return result;
 	}
 
-</script>
-
-
+	</script>
 </html>
