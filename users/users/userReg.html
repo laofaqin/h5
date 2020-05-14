@@ -49,11 +49,11 @@
 					<span style="font-size:.60rem">￥</span><span style="font-size:1.20rem">2000</span>
 				</div>
 				<div class="redbagtext">新人专享红包</div>
-				<div class="btn" catchtap="useItRightNow" onclick="showLoginBox(true)">立即使用</div>
+				<div class="btn" id="useItBtn">立即使用</div>
 			</div>
 
 		</div>
-		<div class="infobigbox" onclick="showLoginBox(false)" id="infobigbox" style="background:black;opacity: .5;">
+		<div class="infobigbox" id="infobigbox" style="background:black;opacity: .5;">
 		</div>
 		<div class="infobox" id="infobox" style="display: none;">
 			<div class="info-top">
@@ -61,15 +61,28 @@
 				<div class="infobox-about">新银乐购 惊喜不断 优惠不停</div>
 			</div>
 			<div class="changeinfo" id="phoneInput">
+				<!-- 当链接里没有推荐人id的时候(新需求),此处隐藏,下面将多一个推荐人手机号输入框 -->
 				<div class="label" id="proInfo">邀请您加入新银乐购</div>
-				<div><input type="number" id="phone" maxlength="11" class="input" placeholder="请输入手机号" onfocus="setScrollTop()" onblur="setScrollTop()" ></div>
+				<div>
+					<input type="number" id="phone" maxlength="11" class="input" placeholder="请输入手机号"
+						onfocus="setScrollTop()" onblur="setScrollTop()">
+				</div>
+				<!-- 推荐人手机号输入框 (链接带有推荐人的时候隐藏)-->
+				<div id="promoterBox" style="display:none">
+					<input type="number" id="PromoterPhone" maxlength="11" class="input" placeholder="请输入推荐人手机号"
+						onfocus="setScrollTop()" onblur="setScrollTop()">
+				</div>
+				<!-- 利用jQuery完成隐藏和显示: $("#id").show();$("#id").hide() -->
+
 				<div class="nextbtn" onclick="firstBind()">下一步</div>
 			</div>
 			<div class="changeinfo" id="codeInput" style="display: none;">
 				<div class="label">设置密码和验证码</div>
-				<div><input type="password" id="password" class="input" placeholder="设置密码" onfocus="setScrollTop()" onblur="setScrollTop()" ></div>
+				<div><input type="password" id="password" class="input" placeholder="设置密码" onfocus="setScrollTop()"
+						onblur="setScrollTop()"></div>
 				<div class="codebox">
-					<input type="number" maxlength="11" class="input" id='smsCode' placeholder="输入验证码" onfocus="setScrollTop()" onblur="setScrollTop()" >
+					<input type="number" maxlength="11" class="input" id='smsCode' placeholder="输入验证码"
+						onfocus="setScrollTop()" onblur="setScrollTop()">
 					<div class="getcode" onclick="sendSms()" id='send'>点击获取</div>
 					<div class="getcode disable" style="display:none;" id='intNumber'></input></div>
 				</div>
@@ -95,6 +108,11 @@
 		</div>
 	</div>
 </body>
+<script>
+	$(document).on("click", "#useItBtn", function () {
+		showLoginBox(true);
+	});
+</script>
 <script>
 	var storeId = getQueryString('storeid'),
 		openId = getQueryString('openid'),
@@ -279,11 +297,14 @@
 
 	// 登录弹窗
 	function showLoginBox(show) {
-		var box = document.getElementById("infobox");
+		// var box = document.getElementById("infobox");
 		if (show) {
-			box.style.display = 'block';
+			// box.style.display = 'block';
+			// 利用jq做显示隐藏, 增加个动画过渡效果
+			$('#infobox').show(200)
 		} else {
-			box.style.display = 'none'
+			// box.style.display = 'none'
+			$('#infobox').hide(200)
 		}
 	}
 	// 电话
@@ -314,7 +335,9 @@
 			showGetPhoneInput(false);
 			showLoginBox(false)
 			showredbag(false)
-			realMoney.style.display = 'block';
+			// realMoney.style.display = 'block';
+			$('#sucess').show(200)
+
 		} else {
 			realMoney.style.display = 'none'
 		}
@@ -324,7 +347,8 @@
 		var realMoney = document.getElementById("fail");
 		if (show) {
 			showredbag(false)
-			realMoney.style.display = 'block';
+			// realMoney.style.display = 'block';
+			$('#fail').show(200)
 		} else {
 			realMoney.style.display = 'none';
 			showredbag(true);
