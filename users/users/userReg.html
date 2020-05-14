@@ -13,6 +13,12 @@
 	<title>用户注册</title>
 </head>
 <link rel="stylesheet" href="./css/style.css">
+<style>
+	/* 兼容ios部分不能点击 */
+	.iosCanClick {
+		cursor: pointer
+	}
+</style>
 <script src="js/fontsize.js"></script>
 <script type="text/javascript" src="js/jquery.min.js"></script>
 <script>
@@ -49,7 +55,7 @@
 					<span style="font-size:.60rem">￥</span><span style="font-size:1.20rem">2000</span>
 				</div>
 				<div class="redbagtext">新人专享红包</div>
-				<div class="btn" id="useItBtn" onclick="">立即使用</div>
+				<div class="btn iosCanClick" id="useItBtn" onclick="">立即使用</div>
 			</div>
 
 		</div>
@@ -64,29 +70,25 @@
 				<!-- 当链接里没有推荐人id的时候(新需求),此处隐藏,下面将多一个推荐人手机号输入框 -->
 				<div class="label" id="proInfo">邀请您加入新银乐购</div>
 				<div>
-					<input type="number" id="phone" maxlength="11" class="input" placeholder="请输入手机号"
-						>
+					<input type="number" id="phone" maxlength="11" class="input" placeholder="请输入手机号">
 				</div>
 				<!-- 推荐人手机号输入框 (链接带有推荐人的时候隐藏)-->
 				<div id="promoterBox" style="display:none">
-					<input type="number" id="PromoterPhone" maxlength="11" class="input" placeholder="请输入推荐人手机号"
-						>
+					<input type="number" id="PromoterPhone" maxlength="11" class="input" placeholder="请输入推荐人手机号">
 				</div>
 				<!-- 利用jQuery完成隐藏和显示: $("#id").show();$("#id").hide() -->
 
-				<div class="nextbtn" onclick="firstBind()">下一步</div>
+				<div class="nextbtn iosCanClick" onclick="firstBind()">下一步</div>
 			</div>
 			<div class="changeinfo" id="codeInput" style="display: none;">
 				<div class="label">设置密码和验证码</div>
-				<div><input type="password" id="password" class="input" placeholder="设置密码" onfocus="setScrollTop()"
-						onblur="setScrollTop()"></div>
+				<div><input type="password" id="password" class="input" placeholder="设置密码"></div>
 				<div class="codebox">
-					<input type="number" maxlength="11" class="input" id='smsCode' placeholder="输入验证码"
-						>
-					<div class="getcode" onclick="sendSms()" id='send'>点击获取</div>
+					<input type="number" maxlength="11" class="input" id='smsCode' placeholder="输入验证码">
+					<div class="getcode iosCanClick" onclick="sendSms()" id='send'>点击获取</div>
 					<div class="getcode disable" style="display:none;" id='intNumber'></input></div>
 				</div>
-				<div class="nextbtn" onclick="secondBind()">下一步</div>
+				<div class="nextbtn iosCanClick" onclick="secondBind()">下一步</div>
 			</div>
 		</div>
 		<div class="sucess" id="sucess" style="display: none;">
@@ -115,9 +117,9 @@
 	});
 
 	// 兼容ios 软键盘收起之后不会弹导致无法聚焦input
-	document.body.addEventListener('focusout', () => { // 软键盘关闭事件
-		window.scroll(0, 0) // 失焦后强制让页面归位 
-	})
+	// document.body.addEventListener('focusout', () => { // 软键盘关闭事件
+	// 	window.scroll(0, 0) // 失焦后强制让页面归位 
+	// })
 </script>
 <script>
 	var storeId = getQueryString('storeid'),
@@ -386,10 +388,7 @@
 		return result;
 	}
 
-	function setScrollTop() {
-		let scrollTop = document.body.scrollTop + document.documentElement.scrollTop;
-		window.scrollTo(0, scrollTop);
-	}
+
 
 </script>
 
