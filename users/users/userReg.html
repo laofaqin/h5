@@ -61,14 +61,14 @@
 		</div>
 		<div class="infobigbox" id="infobigbox" style="background:black;opacity: .5;">
 		</div>
-		<div class="infobox" id="infobox" style="display: none;">
+		<div class="infobox" id="infobox" style="display: none;position: absolute;">
 			<div class="info-top">
 				<img src="./img/invite/xyicon100.png" class="infobox-icon" alt="">
 				<div class="infobox-about">新银乐购 惊喜不断 优惠不停</div>
 			</div>
 			<div class="changeinfo" id="phoneInput">
 				<!-- 当链接里没有推荐人id的时候(新需求),此处隐藏,下面将多一个推荐人手机号输入框 -->
-				<div class="label" id="proInfo">邀请您加入新银乐购</div> 
+				<div class="label" id="proInfo">邀请您加入新银乐购</div>
 				<div>
 					<input type="number" id="phone" maxlength="11" class="input" placeholder="请输入手机号">
 				</div>
@@ -111,18 +111,11 @@
 	</div>
 </body>
 <script>
-	// 为了兼容i7,
+	// 为了兼容i7 点击事件,
 	$(document).on("click", "#useItBtn", function () {
 		showLoginBox(true);
 	});
 
-	// 兼容ios 软键盘收起之后不会弹导致无法聚焦input
-	// document.body.addEventListener('focusout', () => { // 软键盘关闭事件
-	// 	window.scroll(0, 0) // 失焦后强制让页面归位 
-	// })
-	$('input').focusout(	function(){
-window.scroll(0, 0)
-});
 </script>
 <script>
 	var storeId = getQueryString('storeid'),
@@ -160,9 +153,9 @@ window.scroll(0, 0)
 			}
 		});
 	} else {
-		if(proReg && proReg == "1"){
+		if (proReg && proReg == "1") {
 			$("#promoterBox").show()
-		}else{
+		} else {
 			if (storeId == null || storeId == '') {
 				alert('店铺信息错误，请重新注册')
 				window.history.back();
@@ -181,19 +174,19 @@ window.scroll(0, 0)
 	}
 
 	function firstBind() {
-		if(proReg && proReg == "1"){
+		if (proReg && proReg == "1") {
 			var pp = $("#PromoterPhone").val();
-			if(pp == null || pp == ''){
+			if (pp == null || pp == '') {
 				alert("请输入推荐人号码")
 				return
 			}
-			
+
 			getOpenid();
 			$.ajax({
-			url: baseURL + "user/getPromoter/" + pp,
-			type: "get",
-			contentType: "application/json",
-			success: function (data) {
+				url: baseURL + "user/getPromoter/" + pp,
+				type: "get",
+				contentType: "application/json",
+				success: function (data) {
 					if (data.code == 0) {
 						proUserId = data.data.id;
 						var prophone = data.data.userName
@@ -204,7 +197,7 @@ window.scroll(0, 0)
 					}
 				}
 			});
-			
+
 		}
 		var inphone = document.getElementById("phone").value;
 
@@ -422,5 +415,6 @@ window.scroll(0, 0)
 		return result;
 	}
 
-	</script>
+</script>
+
 </html>
