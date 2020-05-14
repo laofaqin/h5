@@ -120,9 +120,9 @@
 	// document.body.addEventListener('focusout', () => { // 软键盘关闭事件
 	// 	window.scroll(0, 0) // 失焦后强制让页面归位 
 	// })
-	$('input').animate({
-		scrollTop: 0
-	}, 500);
+	$('input').focusout(()=>{
+		window.scroll(0, 0) // 失焦后强制让页面归位 
+	});
 </script>
 <script>
 	var storeId = getQueryString('storeid'),
@@ -390,8 +390,6 @@
 		});
 		return result;
 	}
-
-
 
 </script>
 
