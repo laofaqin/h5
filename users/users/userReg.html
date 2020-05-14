@@ -119,6 +119,7 @@
 	// 兼容ios 软键盘收起之后不会弹导致无法聚焦input
 	document.body.addEventListener('focusout', () => { // 软键盘关闭事件
 		window.scroll(0, 0) // 失焦后强制让页面归位 
+		alert('totop')
 	})
 </script>
 <script>
