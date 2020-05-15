@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta content="yes" name="apple-mobile-web-app-capable" />
+	<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+	<meta content="telephone=no" name="format-detection" />
+	<meta content="email=no" name="format-detection" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<title>用户注册</title>
+</head>
+<link rel="stylesheet" href="./css/style.css">
+<style>
+	/* 兼容ios部分不能点击 */
+	.iosCanClick {
+		cursor: pointer
+	}
+</style>
+<script src="js/fontsize.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script src="http://wechatfe.github.io/vconsole/lib/vconsole.min.js?v=3.2.0"></script>
+<script>
+	// init vConsole
+	var vConsole = new VConsole();
+	console.log('Hello world');
+</script>
+<script>
+	// ----------完全加载前的loading页面----------
+	//监听加载状态改变
+	document.onreadystatechange = completeLoading;
+
+	//加载状态为complete时移除loading效果
+	function completeLoading() {
+		if (document.readyState == "complete") {
+			var loadingMask = document.getElementById('loadingDiv');
+			loadingMask.parentNode.removeChild(loadingMask);
+		}
+	}
+</script>
+
+<body>
+	<div id=loadingDiv
+		style="position: fixed;width:100vw;height: 100vh; background:#E9EDF0;z-index:999;display: flex;flex-direction: column;justify-content: center;align-items: center;font-size: 14px;">
+		<img src="./img/loading.gif" style="width:50px;height:50px;">
+		<span>加载中...</span>
+	</div>
+	<div id="all">
+		<div class="box" id='box'>
+			<div class="topbox">
+				<img src="./img/invite/xyicon170.png" class="border-icon" />
+				<div class="border-right">
+					<div class="border-text">线上购买享优惠</div>
+					<div class="border-text">线下乐购商家扫码支付最低9.7折起</div>
+				</div>
+			</div>
+			<div class="hongbaobox">
+				<div class="jine">
+					<span style="font-size:.60rem">￥</span><span style="font-size:1.20rem">2000</span>
+				</div>
+				<div class="redbagtext">新人专享红包</div>
+				<div class="btn iosCanClick" id="useItBtn" onclick="">立即使用</div>
+			</div>
+
+		</div>
+		<div class="infobigbox" id="infobigbox" style="background:black;opacity: .5;">
+		</div>
+		<div class="infobox" id="infobox" style="display: none;">
+			<div class="info-top">
+				<img src="./img/invite/xyicon100.png" class="infobox-icon" alt="">
+				<div class="infobox-about">新银乐购 惊喜不断 优惠不停</div>
+			</div>
+			<div class="changeinfo" id="phoneInput">
+				<!-- 当链接里没有推荐人id的时候(新需求),此处隐藏,下面将多一个推荐人手机号输入框 -->
+				<div class="label" id="proInfo">邀请您加入新银乐购</div>
+				<div>
+					<input type="number" id="phone" maxlength="11" class="input" placeholder="请输入手机号">
+				</div>
+				<!-- 推荐人手机号输入框 (链接带有推荐人的时候隐藏)-->
+				<div id="promoterBox" style="display:none">
+					<input type="number" id="PromoterPhone" maxlength="11" class="input" placeholder="请输入推荐人手机号">
+				</div>
+				<!-- 利用jQuery完成隐藏和显示: $("#id").show();$("#id").hide() -->
+
+				<div class="nextbtn iosCanClick" onclick="firstBind()">下一步</div>
+			</div>
+			<div class="changeinfo" id="codeInput" style="display: none;">
+				<div class="label">设置密码和验证码</div>
+				<div><input type="password" id="password" class="input" placeholder="设置密码"></div>
+				<div class="codebox">
+					<input type="number" maxlength="11" class="input" id='smsCode' placeholder="输入验证码">
+					<div class="getcode iosCanClick" onclick="sendSms()" id='send'>点击获取</div>
+					<div class="getcode disable" style="display:none;" id='intNumber'></div>
+				</div>
+				<div class="nextbtn iosCanClick" onclick="secondBind()">下一步</div>
+			</div>
+		</div>
+		<div class="sucess" id="sucess" style="display: none;">
+			<div class="sucess-top"><img src alt="" class="close" onclick="showSucess(false)"></div>
+			<div style="text-align: center;"><img src="./img/sucess.png" class="sucess-icon" alt=""></div>
+			<div class="sucess-title">恭喜您，注册成功</div>
+			<div class="sucess-desc">恭喜您加入新银乐购, 马上开启乐购新生活</div>
+			<div class="sucess-btn">
+				<a href="https://a.app.qq.com/o/simple.jsp?pkgname=com.newly.silver.o2o">立即下载体验</a>
+				<a href="" id="payurl" style="display: none;">立即去支付</a>
+			</div>
+		</div>
+		<div class="sucess" id="fail" style="display: none;">
+			<div class="sucess-top"><img src="./img/close.png" alt="" class="close" onclick="showFail(false)"></div>
+			<div style="text-align: center;"><img src="./img/sucess.png" class="sucess-icon" alt=""></div>
+			<div class="sucess-title">对不起，注册失败</div>
+			<div class="sucess-desc">请重新扫码注册</div>
+			<!-- <div class="sucess-btn">立即下载体验</div> -->
+		</div>
+	</div>
+</body>
+<script>
+	// 为了兼容i7 点击事件,
+	$(document).on("click", "#useItBtn", function () {
+		showLoginBox(true);
+	});
+	var u = navigator.userAgent, app = navigator.appVersion;
+	var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+	console.log(u);
+	console.log(app)
+	console.log(isIOS)
+	if(isIOS){
+		$("#infobox").css('position','absolute');
+	}
+</script>
+<script>
+	var storeId = getQueryString('storeid'),
+		openId = getQueryString('openid'),
+		alipayId = getQueryString('alipayid'),
+		proCode = getQueryString('promoter'),
+		srcType = getQueryString('srcType'),
+		wxcode = getQueryString('code'),
+		proReg = getQueryString('proReg'),
+		storeName = getQueryString('storename'),
+		phone = '',
+		retUrl = decodeURIComponent(getQueryString('returl')),
+		proUserId = '',
+		baseURL = 'https://hope-user.xy999888.com/api/users/',
+		code = '';
+	var proInfo = $("#proInfo")
+
+	if (proCode) {
+		getOpenid();
+		$.ajax({
+			url: baseURL + "user/promoter/" + proCode,
+			type: "get",
+			contentType: "application/json",
+			success: function (data) {
+				if (data.code == 0) {
+					proUserId = data.data.id;
+					var prophone = data.data.userName
+					proInfo.html(prophone + ":" + proInfo.html())
+
+					//获取openid
+
+				} else {
+					alert(data.message)
+				}
+			}
+		});
+	} else {
+		if (proReg && proReg == "1") {
+			$("#promoterBox").show()
+		} else {
+			if (storeId == null || storeId == '') {
+				alert('店铺信息错误，请重新注册')
+				window.history.back();
+			}
+
+			if (openId == '' && alipayId == '') {
+				alert('注册信息错误，请重新注册')
+				window.history.back();
+			}
+		}
+	}
+
+
+	if (storeName && storeName != '') {
+		proInfo.html(storeName + ":" + proInfo.html())
+	}
+
+	function firstBind() {
+		if (proReg && proReg == "1") {
+			var pp = $("#PromoterPhone").val();
+			if (pp == null || pp == '') {
+				alert("请输入推荐人号码")
+				return
+			}
+
+			getOpenid();
+			$.ajax({
+				url: baseURL + "user/getPromoter/" + pp,
+				type: "get",
+				contentType: "application/json",
+				success: function (data) {
+					if (data.code == 0) {
+						proUserId = data.data.id;
+						var prophone = data.data.userName
+						proInfo.html(prophone + ":" + proInfo.html())
+
+					} else {
+						alert(data.message)
+					}
+				}
+			});
+
+		}
+		var inphone = document.getElementById("phone").value;
+
+		if (!checkPhone(inphone)) {
+			alert("手机号码输入错误 " + inphone);
+			return false;
+		} else {
+			phone = inphone
+			//走一次登录，验证是否有注册
+			$.ajax({
+				url: baseURL + "user/xcxBind",
+				type: "POST",
+				contentType: "application/json",
+				data: JSON.stringify({
+					alipayId: alipayId,
+					userName: phone,
+					storeId: storeId,
+					wxId: openId
+				}),
+				success: function (data) {
+					if (data.code != 0) {
+						showGetPhoneInput(false);
+						showCodeInput(true);
+					} else {
+						showSucess(true)
+					}
+				}
+			});
+
+
+		}
+
+	}
+
+	function secondBind() {
+		var smsCode = $("#smsCode").val()
+		var password = $("#password").val()
+
+		if (!smsCode) {
+			alert("请输入验证码")
+			return false;
+		}
+		if (!password) {
+			alert("请输入密码")
+			return false;
+		}
+
+		$.ajax({
+			url: baseURL + "user/xcxBind",
+			type: "POST",
+			contentType: "application/json",
+			data: JSON.stringify({
+				alipayId: alipayId,
+				userName: phone,
+				wxId: openId,
+				proUserId: proUserId,
+				storeId: storeId,
+				password: password,
+				smsCode: smsCode
+			}),
+			success: function (data) {
+				if (data.code == 0) {
+					showSucess(true)
+				} else {
+					if (data.code == '1002006005') {
+						alert(data.message)
+					} else {
+						alert(data.message)
+						showFail(true)
+					}
+				}
+			}
+		});
+	}
+
+	function sendSms() {
+		if (!phone) {
+			alert("手机号码输入错误 " + phone);
+		}
+
+		$.ajax({
+			url: "https://hope-system.xy999888.com/api/users/sms/send/register/" + phone,
+			type: "get",
+			contentType: "application/json",
+			success: function (data) {
+
+				if (data.code == 0) {
+
+					var num = 120;
+					var timeId;
+					var sendIntevral = $("#intNumber")
+					var send = $("#send")
+					send.hide()
+					sendIntevral.show();
+					timeId = setInterval(function () {
+						num--;
+						sendIntevral.html(num)
+						if (num == 0) {
+							clearInterval(timeId);
+							send.show()
+							sendIntevral.hide()
+						}
+					}, 1000);
+					// alert("已发送验证码，请注意查收");
+				} else {
+					alert(data.message);
+					return;
+				}
+			}
+		});
+	}
+
+	function getOpenid() {
+		if (!wxcode) {
+			return
+		}
+		$.ajax({
+			url: baseURL + "user/getOpenIdByCode/" + wxcode,
+			type: "get",
+			contentType: "application/json",
+			success: function (data) {
+				if (data.code == 0) {
+					openId = data.data.openId
+
+				} else {
+					alert(data.message)
+				}
+			}
+		});
+	}
+
+	// 登录弹窗
+	function showLoginBox(show) {
+		// var box = document.getElementById("infobox");
+		if (show) {
+			// box.style.display = 'block';
+			// 利用jq做显示隐藏, 增加个动画过渡效果
+			$('#infobox').show(200)
+		} else {
+			// box.style.display = 'none'
+			$('#infobox').hide(200)
+		}
+	}
+	// 电话
+	function showGetPhoneInput(show) {
+		var realMoney = document.getElementById("phoneInput");
+		if (show) {
+			realMoney.style.display = 'block';
+		} else {
+			realMoney.style.display = 'none'
+		}
+	}
+	// 验证码
+	function showCodeInput(show) {
+		var realMoney = document.getElementById("codeInput");
+		if (show) {
+			realMoney.style.display = 'block';
+		} else {
+			realMoney.style.display = 'none'
+		}
+	}
+	// 注册成功
+	function showSucess(show) {
+		var realMoney = document.getElementById("sucess");
+		console.log('retUrl : ' + retUrl.length)
+		if (retUrl.length > 20) {
+			window.location.href = retUrl
+		}
+		if (show) {
+			showGetPhoneInput(false);
+			showLoginBox(false)
+			showredbag(false)
+			// realMoney.style.display = 'block';
+			$('#sucess').show(200)
+
+		} else {
+			realMoney.style.display = 'none'
+		}
+	}
+	// 注册失败
+	function showFail(show) {
+		var realMoney = document.getElementById("fail");
+		if (show) {
+			showredbag(false)
+			// realMoney.style.display = 'block';
+			$('#fail').show(200)
+		} else {
+			realMoney.style.display = 'none';
+			showredbag(true);
+		}
+	}
+	function showredbag(show) {
+		var realMoney = document.getElementById("box");
+		if (show) {
+			realMoney.style.display = 'block';
+		} else {
+			realMoney.style.display = 'none'
+		}
+	}
+	function checkPhone(phone) {
+		if (!(/^1[3|4|5|6|7|8|9]\d{9}$/.test(phone))) {
+			return false;
+		}
+
+		return true;
+	}
+
+	function getQueryString(parameterName) {
+		var result = null,
+			tmp = [];
+		location.search.substr(1).split("&").forEach(function (item) {
+			tmp = item.split("=");
+			if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+		});
+		return result;
+	}
+
+</script>
+
+</html>
